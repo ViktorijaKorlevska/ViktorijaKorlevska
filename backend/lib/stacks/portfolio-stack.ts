@@ -118,7 +118,7 @@ export class ViktorijaPortfolioStack extends cdk.Stack {
         GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
         GITHUB_OWNER: process.env.GITHUB_OWNER || 'ViktorijaKorlevska',
         GITHUB_REPO: process.env.GITHUB_REPO || 'ViktorijaKorlevska',
-        GITHUB_WORKFLOW: process.env.GITHUB_WORKFLOW || 'deploy-client.yml',
+        GITHUB_WORKFLOW: process.env.TARGET_WORKFLOW || 'deploy-client.yml',
         SANITY_WEBHOOK_SECRET: process.env.SANITY_WEBHOOK_SECRET || '',
       },
     });
