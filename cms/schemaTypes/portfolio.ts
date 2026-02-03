@@ -52,6 +52,12 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'websiteUrl',
+      title: 'Website URL',
+      type: 'url',
+      description: 'Main URL of your portfolio site',
+    }),
+    defineField({
       name: 'primary_background_color',
       title: 'Primary Background Color',
       type: 'string',
@@ -85,6 +91,12 @@ export default defineType({
       title: 'Portfolio Projects',
       type: 'array',
       of: [{ type: 'portfolioItem' }],
+    }),
+    defineField({
+      name: 'other_works',
+      title: 'Other Works (SMyWay Section)',
+      type: 'array',
+      of: [{ type: 'otherWork' }],
     }),
   ],
   preview: {

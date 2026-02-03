@@ -1,60 +1,82 @@
-# Antoine Wodniack – Portfolio (Open Source Edition)
+# 👋 Hi, I’m Viktorija — UX, UI & Graphic Designer
 
-Welcome to the public source of my personal portfolio – [wodniack.dev](https://wodniack.dev), built with [Astro](https://astro.build).
+I’m a **Senior UX, UI & Graphic Designer** with **10+ years of experience** crafting digital products that are not only visually compelling, but genuinely easy and satisfying to use.
 
-This project performed far beyond my expectations and brought an overwhelming amount of positive feedback.
-Thanks for the love. ❤️
-
-I said that if I won a Webby, I’d open-source it. Mission accomplished. 🥳
-
-I’m open-sourcing it so that junior developers, curious minds, and future portfolio crafters can **learn from real-world code**, understand how things are built, and get inspired to build their own.
-
-🚫 **Don't copy/paste it as-is and call it yours.** The community will notice, and you’ll doom yourself to eternal mediocrity.
-✅ **Do explore, dissect, and adapt it with purpose.**
+I believe great design lives at the intersection of **empathy, strategy, and clarity** — where user needs meet business goals and turn complexity into simplicity.
 
 ---
 
-## 🚀 Getting Started
+## ✨ What I Do Best
 
-To run the project locally:
+### 🔍 UX Audits
 
-```bash
-# 1. Clone this repo
-git clone https://github.com/AntoineW/AW-2025-Portfolio.git
-cd wodniack-portfolio
+I uncover friction points, usability gaps, and missed opportunities in user journeys — transforming insights into clear, actionable improvements.
 
-# 2. Install dependencies
-npm install
+### 🎨 UI Redesign
 
-# 3. Start the dev server
-npm run dev
-```
+I design intuitive, consistent, and engaging interfaces that feel effortless to navigate and delightful to use.
+
+### 🧩 Graphic & Visual Design
+
+From branding systems to digital assets, I create cohesive visual languages that strengthen product identity and recognition.
 
 ---
 
-## 🧠 Why This Is Open
-Curiosity and learning are everything in creative development.
-I learned the most by studying real code—Codrops demos, CodePen experiments, random GitHub repos.
-This portfolio gave me way more visibility than I expected. Now it’s time to return the love.
+## 🚀 Who I Work With
+
+I collaborate with:
+
+- **Startups**
+- **Small businesses**
+- **Product teams**
+
+Helping them turn complex ideas into **clear, user-centered experiences** that improve:
+
+- Usability
+- Engagement
+- Conversion
+
+Whether it’s a **mini UX audit**, a **full UI redesign**, or a **visual branding project**, my focus is always the same:
+
+> Design solutions that are not just beautiful — but strategically effective.
 
 ---
 
-## 📄 License
-This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License.
+## 🧠 My Design Philosophy
 
-That means:
+I’m on a mission to **transform user experiences into captivating journeys**.
 
-✅ You can learn from it, fork it, and adapt it for non-commercial purposes.
+With a blend of **creativity and empathy**, I craft digital landscapes that:
 
-🚫 You can’t resell it, rebrand it, or use it commercially without permission.
+- Look stunning
+- Feel intuitive
+- Respect the user’s time and attention
 
-🔗 You must credit the source (me) if you use parts of it.
-
-See LICENSE.md for full details.
+Every click, swipe, and interaction should feel intentional and memorable.  
+Users are never an afterthought — they are the foundation of every decision I make.
 
 ---
 
-## 💬 Final Word
+## 🤝 Let’s Work Together
 
-This is not a template. It's a real portfolio, shared with intent.
-Use it to get better. Not to take shortcuts.
+I’m open to:
+
+- Collaborations
+- Consulting
+- Freelance projects
+
+If you’re looking to elevate your product’s experience, clarify your vision, or create something users genuinely love — let’s talk.
+
+---
+
+## 🌐 Find Me Online
+
+- 💼 **LinkedIn**  
+  https://www.linkedin.com/in/viktorija-korlevska-988107199/
+
+- 🎨 **Behance**  
+  https://www.behance.net/viktorikorlevs
+
+---
+
+_Designing with purpose. Creating with empathy. Building experiences that last._

@@ -1,27 +1,27 @@
 ---
-import { sanityClient } from '../lib/sanity';
+export interface Props {
+  profile?: any
+}
 
-// Fetch portfolio data from Sanity
-const query = `*[_type == "portfolio"][0]`;
-const portfolio = await sanityClient.fetch(query) || {};
+const { profile } = Astro.props
 
-const email = portfolio.email || 'viktorijakorlevska@gmail.com';
-const ctaButtonText = portfolio.cta_button_text || 'GO';
-const ctaText = portfolio.cta_text || "Let's Rock";
+const email = profile?.email || 'viktorijakorlevska@gmail.com'
+const ctaButtonText = profile?.cta_button_text || 'GO'
+const ctaText = profile?.cta_text || "Let's Rock"
 
 // Split ctaText into words and characters, handling apostrophes
-const lines = ctaText.split(' ').map(word => {
-  const chars = word.split('');
-  const result = [];
+const lines = ctaText.split(' ').map((word) => {
+  const chars = word.split('')
+  const result = []
   chars.forEach((char) => {
     if (char === "'" && result.length > 0) {
-      result[result.length - 1] += `<span class="sup">'</span>`;
+      result[result.length - 1] += `<span class="sup">'</span>`
     } else {
-      result.push(char);
+      result.push(char)
     }
-  });
-  return result;
-});
+  })
+  return result
+})
 ---
 
 <section class="s-cta" data-intersect>
@@ -287,7 +287,7 @@ const lines = ctaText.split(' ').map(word => {
       this.tl.pause()
 
       clearTimeout(this.wave.timeout)
-      this.wave.timeout = setTimeout(() => {
+      this.wave.timeout = window.setTimeout(() => {
         this.waveShock()
       }, 600)
 
@@ -439,7 +439,7 @@ const lines = ctaText.split(' ').map(word => {
           scale: 1.05,
           duration: 2.7,
           ease: 'power2.in',
-        }
+        },
       )
 
       this.tl.call(this.wavePulse.bind(this), [])

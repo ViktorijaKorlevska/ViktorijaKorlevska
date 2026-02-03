@@ -24,6 +24,6 @@ export default defineType({
       name: 'instagram',
       title: 'Instagram',
       type: 'url',
-    }),
+    })
   ],
 })

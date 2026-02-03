@@ -1,4 +1,13 @@
 ---
+export interface Props {
+  profile?: any
+}
+
+const { profile } = Astro.props
+
+const role = profile?.role || 'Creative Developer'
+const roleWords = role.split(' ')
+
 import AWaves from './AWaves.astro'
 import ASeparator from './ASeparator.astro'
 ---
@@ -13,15 +22,22 @@ import ASeparator from './ASeparator.astro'
     />
 
     <h1 class="s__title">
-      <span class="s__title__word js-word">Creative</span>
-      <img
-        class="s__title__asset js-star"
-        src="/images/asset-star.svg"
-        alt=""
-        width="48"
-        height="48"
-      />
-      <span class="s__title__word js-word">Developer</span>
+      {
+        roleWords.map((word, index) => (
+          <>
+            <span class="s__title__word js-word">{word}</span>
+            {index < roleWords.length - 1 && (
+              <img
+                class="s__title__asset js-star"
+                src="/images/asset-star.svg"
+                alt=""
+                width="48"
+                height="48"
+              />
+            )}
+          </>
+        ))
+      }
     </h1>
 
     <ASeparator
@@ -124,7 +140,7 @@ import ASeparator from './ASeparator.astro'
       const border = this.el.querySelector('.js-border')
       const chars = content.querySelectorAll('.char__inner')
       const separators = content.querySelectorAll('.js-separator')
-      const star = content.querySelector('.js-star')
+      const stars = content.querySelectorAll('.js-star')
 
       const tl = gsap.timeline()
 
@@ -143,19 +159,23 @@ import ASeparator from './ASeparator.astro'
             ease: 'power3.inOut',
           },
         },
-        0.5
+        0.5,
       )
 
-      tl.call(() => {
-        waves.dispatchEvent(new CustomEvent('introend'))
-      }, null, '-=1')
+      tl.call(
+        () => {
+          waves.dispatchEvent(new CustomEvent('introend'))
+        },
+        null,
+        '-=1',
+      )
 
       tl.set(
         this.el,
         {
           opacity: 1,
         },
-        0
+        0,
       )
 
       tl.to(
@@ -166,7 +186,7 @@ import ASeparator from './ASeparator.astro'
           duration: 1,
           ease: 'expo.inOut',
         },
-        0
+        0,
       )
 
       tl.from(
@@ -176,7 +196,7 @@ import ASeparator from './ASeparator.astro'
           duration: 1.35,
           ease: 'expo.out',
         },
-        0
+        0,
       )
 
       tl.fromTo(
@@ -189,7 +209,7 @@ import ASeparator from './ASeparator.astro'
           duration: 1,
           ease: 'expo.inOut',
         },
-        1
+        1,
       )
 
       tl.to(
@@ -200,17 +220,18 @@ import ASeparator from './ASeparator.astro'
           duration: 1,
           ease: 'expo.inOut',
         },
-        1
+        1,
       )
 
       tl.from(
-        star,
+        stars,
         {
           rotate: 90,
           duration: 2,
           ease: 'expo.out',
+          stagger: 0.1,
         },
-        1.5
+        1.5,
       )
 
       tl.fromTo(
@@ -224,7 +245,7 @@ import ASeparator from './ASeparator.astro'
           ease: 'expo.inOut',
           stagger: 0.02,
         },
-        0.45
+        0.45,
       )
 
       tl.from(
@@ -234,7 +255,7 @@ import ASeparator from './ASeparator.astro'
           duration: 1.5,
           ease: 'expo.inOut',
         },
-        0.75
+        0.75,
       )
 
       tl.call(() => {

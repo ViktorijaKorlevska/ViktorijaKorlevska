@@ -32,6 +32,9 @@ export const handler = async (event) => {
   // 2. Trigger GitHub Action
   const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/actions/workflows/${GITHUB_WORKFLOW}/dispatches`;
 
+  console.log('Triggering GitHub workflow at:', url);
+  console.log('Owner:', GITHUB_OWNER, 'Repo:', GITHUB_REPO, 'Workflow:', GITHUB_WORKFLOW);
+
   try {
     const response = await fetch(url, {
       method: 'POST',

@@ -1,3 +1,11 @@
+---
+export interface Props {
+  profile?: any
+}
+
+const { profile } = Astro.props
+---
+
 <footer class="site-foot">
   <div class="site-foot__logo">
     <a href="/">
@@ -17,7 +25,7 @@
         </path>
       </svg>
 
-      <span class="u-sr-only">Antoine Wodniack</span>
+      <span class="u-sr-only">{profile?.name || 'Viktorija Korlevska'}</span>
     </a>
   </div><!-- .site-foot__logo -->
 </footer>

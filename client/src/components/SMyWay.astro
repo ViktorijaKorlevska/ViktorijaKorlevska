@@ -1,7 +1,47 @@
 ---
 import { Image } from 'astro:assets'
+import { sanityClient } from '../lib/sanity'
+import imageUrlBuilder from '@sanity/image-url'
 
-const frames = [
+const builder = imageUrlBuilder(sanityClient)
+function urlFor(source: any) {
+  return builder.image(source)
+}
+
+export interface Props {
+  profile?: any
+}
+
+const { profile } = Astro.props
+
+const preCtaText = profile?.pre_cta_text || 'Experience your users will love'
+
+// Logic: if word1 + word2 > 8 split them in separate lines
+const words = preCtaText.split(/\s+/)
+let lines = []
+let i = 0
+
+while (i < words.length) {
+  const currentWord = words[i]
+  const nextWord = words[i + 1]
+
+  if (nextWord) {
+    if (currentWord.length + nextWord.length > 8) {
+      lines.push(currentWord)
+      i++
+    } else {
+      lines.push(`${currentWord} ${nextWord}`)
+      i += 2
+    }
+  } else {
+    lines.push(currentWord)
+    i++
+  }
+}
+
+const formattedPreCta = lines.join('<br />')
+
+const staticFrames = [
   {
     caption: 'Generative art poster concept',
     src: import('/src/assets/frames/art-1987.jpg'),
@@ -59,6 +99,15 @@ const frames = [
     src: import('/src/assets/frames/legos.jpg'),
   },
 ]
+
+const frames =
+  profile?.other_works?.length > 0
+    ? profile.other_works.map((item: any) => ({
+        caption: item.caption,
+        src: urlFor(item.image).auto('format').url(),
+        isRemote: true,
+      }))
+    : staticFrames
 ---
 
 <section class="s-my-way" data-intersect>
@@ -81,13 +130,16 @@ const frames = [
       frames.map((frame, index) => (
         <div class="a-object a-object--frame">
           <figure class="a__inner">
-            <Image src={frame.src} alt={frame.caption} class="a__img" />
-            {/* <img
-              loading="lazy"
-              class="a__img"
-              src={frame.src}
-              alt={frame.caption}
-            /> */}
+            {frame.isRemote ? (
+              <img
+                src={frame.src}
+                alt={frame.caption}
+                class="a__img"
+                loading="lazy"
+              />
+            ) : (
+              <Image src={frame.src} alt={frame.caption} class="a__img" />
+            )}
 
             <figcaption class="a__caption" set:html={frame.caption} />
           </figure>
@@ -117,23 +169,19 @@ const frames = [
   <div class="s__catcher">
     <div class="s__catcher__distorted-wrapper">
       <div class="s__catcher__distorted">
-        <div class="s__catcher__text s__catcher__text--distorted">
-          Remember <br />
-          not to <br />
-          steal <br />
-          this
-        </div>
+        <div
+          class="s__catcher__text s__catcher__text--distorted"
+          set:html={formattedPreCta}
+        />
       </div><!-- .s__catcher__distorted -->
     </div><!-- .s__catcher__distorted-wrapper -->
 
     <div class="s__catcher__normal-wrapper">
       <div class="s__catcher__normal">
-        <div class="s__catcher__text s__catcher__text--normal">
-          Remember <br />
-          not to <br />
-          steal <br />
-          this
-        </div>
+        <div
+          class="s__catcher__text s__catcher__text--normal"
+          set:html={formattedPreCta}
+        />
       </div><!-- .s__catcher__normal -->
     </div><!-- .s__catcher__normal-wrapper -->
   </div><!-- .s__catcher -->
@@ -284,7 +332,7 @@ const frames = [
         object.el.addEventListener('mousedown', this.objectDragStart.bind(this))
         object.el.addEventListener(
           'touchstart',
-          this.objectDragStart.bind(this)
+          this.objectDragStart.bind(this),
         )
       })
       this.el.addEventListener('mouseup', this.objectDragEnd.bind(this))
@@ -292,7 +340,7 @@ const frames = [
 
       this.objectsWrapper.addEventListener(
         'touchmove',
-        this.onTouchMove.bind(this)
+        this.onTouchMove.bind(this),
       )
 
       this.el.addEventListener('intersect', this.onIntersect.bind(this), {
@@ -462,7 +510,7 @@ const frames = [
 
       this.el.style.setProperty(
         '--distortion',
-        String(Math.hypot(dx, dy) * 0.14)
+        String(Math.hypot(dx, dy) * 0.14),
       )
 
       // Side lines
@@ -509,7 +557,7 @@ const frames = [
       if (this.objects.length > 0) {
         const object = this.objects.splice(
           Math.floor(Math.random() * this.objects.length),
-          1
+          1,
         )[0]
 
         object.set()
@@ -527,12 +575,15 @@ const frames = [
      * Initial objects
      */
     firstObjects() {
-      const totalObjects =  Math.max(Math.min(Math.round(window.safeWidth * 0.025), 5), 2)
+      const totalObjects = Math.max(
+        Math.min(Math.round(window.safeWidth * 0.025), 5),
+        2,
+      )
 
       for (let i = 0; i < totalObjects; i++) {
         const object = this.objects.splice(
           Math.floor(Math.random() * this.objects.length),
-          1
+          1,
         )[0]
 
         object.set(false)
@@ -1285,7 +1336,7 @@ const frames = [
       line-height: 0.82;
       text-align: center;
       text-transform: uppercase;
-      white-space: nowrap;
+      white-space: normal;
 
       @include mq(tablet) {
         --amplitude: 75%;
@@ -1301,7 +1352,7 @@ const frames = [
         left: 0;
 
         width: 100%;
-        height: calc(var(--padding) * 1.5);
+        height: 100vh; // Give it more breathing room for multiple lines
 
         overflow: hidden;
         perspective: calc(var(--distortion) * 0.7em);
@@ -1373,7 +1424,9 @@ const frames = [
 
           transform: translate3d(
             0,
-            calc(var(--scroll-progress) * var(--amplitude) - var(--offset)),
+            calc(
+              var(--scroll-progress) * (var(--amplitude) * 0.5) - var(--offset)
+            ),
             0
           );
         }
@@ -1384,7 +1437,8 @@ const frames = [
           transform: translate3d(
             0,
             calc(
-              var(--scroll-progress) * var(--amplitude) - 100% - var(--offset)
+              var(--scroll-progress) * (var(--amplitude) * 0.5) -
+                100% - var(--offset)
             ),
             0
           );

@@ -1,6 +1,14 @@
 ---
-import { sanityClient } from '../lib/sanity'
 import { toHTML } from '@portabletext/to-html'
+
+export interface Props {
+  profile?: any
+}
+
+const { profile } = Astro.props
+
+const description = profile?.description
+const htmlContent = description ? toHTML(description) : null
 
 const awards = {
   counters: {
@@ -18,10 +26,6 @@ const awards = {
     CSSDA2015: 'CSSDA Best Front-End <br/>Developer 2015',
   },
 }
-
-const query = `*[_type == "portfolio"][0].description`
-const description = await sanityClient.fetch(query)
-const htmlContent = description ? toHTML(description) : null
 ---
 
 <section id="about" class="s-about" data-intersect>
