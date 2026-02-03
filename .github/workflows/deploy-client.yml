@@ -1,0 +1,65 @@
+name: Deploy Client
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "client/**"
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy-client:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
+
+      - name: Install Dependencies
+        run: |
+          cd client
+          npm ci
+
+      - name: Build Astro Site
+        run: |
+          cd client
+          npm run build
+        env:
+          SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT_ID }}
+          SANITY_DATASET: ${{ secrets.SANITY_DATASET }}
+
+      - name: Configure AWS Credentials
+        uses: actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/cicd
+          aws-region: us-east-1
+
+      - name: Get CDK Stack Outputs
+        id: stack-outputs
+        run: |
+          outputs=$(aws cloudformation describe-stacks --stack-name viktorija-portfolio --query "Stacks[0].Outputs" --output json)
+          bucket_name=$(echo $outputs | jq -r '.[] | select(.OutputKey=="BucketName") | .OutputValue')
+          distribution_id=$(echo $outputs | jq -r '.[] | select(.OutputKey=="DistributionId") | .OutputValue')
+
+          echo "BUCKET_NAME=$bucket_name" >> $GITHUB_OUTPUT
+          echo "DISTRIBUTION_ID=$distribution_id" >> $GITHUB_OUTPUT
+
+      - name: Sync Static Assets to S3
+        run: |
+          aws s3 sync ./client/dist s3://${{ steps.stack-outputs.outputs.BUCKET_NAME }} --delete
+
+      - name: Invalidate CloudFront Cache
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ steps.stack-outputs.outputs.DISTRIBUTION_ID }} --paths "/*"

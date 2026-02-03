@@ -1,8 +1,27 @@
 ---
-const lines = [
-  ['L', 'e', 't<span class="sup">\'</span>', 's'],
-  ['R', 'o', 'c', 'k'],
-]
+import { sanityClient } from '../lib/sanity';
+
+// Fetch portfolio data from Sanity
+const query = `*[_type == "portfolio"][0]`;
+const portfolio = await sanityClient.fetch(query) || {};
+
+const email = portfolio.email || 'viktorijakorlevska@gmail.com';
+const ctaButtonText = portfolio.cta_button_text || 'GO';
+const ctaText = portfolio.cta_text || "Let's Rock";
+
+// Split ctaText into words and characters, handling apostrophes
+const lines = ctaText.split(' ').map(word => {
+  const chars = word.split('');
+  const result = [];
+  chars.forEach((char) => {
+    if (char === "'" && result.length > 0) {
+      result[result.length - 1] += `<span class="sup">'</span>`;
+    } else {
+      result.push(char);
+    }
+  });
+  return result;
+});
 ---
 
 <section class="s-cta" data-intersect>
@@ -11,7 +30,7 @@ const lines = [
       <div class="s__button js-button">
         <div class="s__button__inner">
           <div class="s__button__text js-button-text">
-            GO
+            {ctaButtonText}
           </div><!-- .s__button__text -->
         </div><!-- .s__button__inner -->
       </div><!-- .s__button -->
@@ -37,8 +56,8 @@ const lines = [
             </div>
           ))
         }
-        <a href="mailto:hello@wodniack.dev" class="s__cta__link">
-          hello@wodniack.dev
+        <a href={`mailto:${email}`} class="s__cta__link">
+          {email}
         </a>
 
         <div class="s__cta__stars">
