@@ -74,13 +74,16 @@ Two workflow files have been created in `.github/workflows/`:
 2.  **Configure GitHub Secrets**
     Add these to **Settings** -> **Secrets and variables** -> **Actions**:
 
-| Secret Name             | Description                                               |
-| :---------------------- | :-------------------------------------------------------- |
-| `AWS_ACCOUNT_ID`        | Your AWS Account ID.                                      |
-| `SANITY_PROJECT_ID`     | Your Sanity Project ID.                                   |
-| `SANITY_DATASET`        | Your Sanity Dataset (e.g., `production`).                 |
-| `SANITY_GHA_TOKEN`      | GitHub PAT with `repo` scope to trigger workflows.        |
-| `SANITY_WEBHOOK_SECRET` | (Optional) Shared secret for Sanity Webhook verification. |
+| Secret Name                 | Description                                               |
+| :-------------------------- | :-------------------------------------------------------- |
+| `AWS_ACCOUNT_ID`            | Your AWS Account ID.                                      |
+| `SANITY_PROJECT_ID`         | Your Sanity Project ID.                                   |
+| `SANITY_DATASET`            | Your Sanity Dataset (e.g., `production`).                 |
+| `SANITY_GHA_TOKEN`          | GitHub PAT with `repo` scope to trigger workflows.        |
+| `SANITY_WEBHOOK_SECRET`     | (Optional) Shared secret for Sanity Webhook verification. |
+| `PORTFOLIO_DOMAIN_NAME`     | (Optional) Custom domain (e.g. `viktorijakorlevska.com`). |
+| `PORTFOLIO_ALTERNATE_NAMES` | (Optional) Comma-separated aliases (e.g. `www...`).       |
+| `PORTFOLIO_CERT_ARN`        | (Optional) ARN of ACM cert in us-east-1.                  |
 
 ## Sanity Webhook Configuration
 

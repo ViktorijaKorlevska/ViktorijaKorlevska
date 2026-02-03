@@ -49,3 +49,6 @@ jobs:
           GITHUB_OWNER: ViktorijaKorlevska
           GITHUB_REPO: ViktorijaKorlevska
           GITHUB_WORKFLOW: "deploy-client.yml"
+          PORTFOLIO_DOMAIN_NAME: ${{ secrets.PORTFOLIO_DOMAIN_NAME }}
+          PORTFOLIO_ALTERNATE_NAMES: ${{ secrets.PORTFOLIO_ALTERNATE_NAMES }}
+          PORTFOLIO_CERT_ARN: ${{ secrets.PORTFOLIO_CERT_ARN }}

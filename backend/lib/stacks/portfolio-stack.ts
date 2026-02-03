@@ -5,34 +5,47 @@ import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
+import * as route53 from 'aws-cdk-lib/aws-route53';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
+import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import * as path from 'path';
+export interface ViktorijaPortfolioStackProps extends cdk.StackProps {
+  domainName?: string;
+  alternateNames?: string[];
+  certificateArn?: string;
+}
 
 export class ViktorijaPortfolioStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: ViktorijaPortfolioStackProps) {
     super(scope, id, props);
 
+    const domainName = props?.domainName;
+    const alternateNames = props?.alternateNames || [];
+    const certificateArn = props?.certificateArn;
+
     // 1. S3 Bucket for Static Website
-    const bucket = new s3.Bucket(this, 'AstroBucket', {
+    const bucket = new s3.Bucket(this, 'ViktorijaPortfolioBucket', {
+      bucketName: `viktorija-portfolio-assets-${this.account}`,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       encryption: s3.BucketEncryption.S3_MANAGED,
-      removalPolicy: cdk.RemovalPolicy.DESTROY, // Change to RETAIN for production
-      autoDeleteObjects: true, // Only for non-production environments to ease cleanup
+      enforceSSL: true,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
     });
 
     // 2. Lambda@Edge Functions
-    // Origin Request Function (Rewrites /about -> /about/index.html)
-    // Note: Lambda@Edge must be in us-east-1. The stack should be deployed to us-east-1,
-    // or use EdgeFunction which handles cross-region creation (experimental).
-    // Using standard Function here assuming stack is in us-east-1 as per best practice for Edge stacks.
-    const originRequestFunction = new lambda.Function(this, 'OriginRequestFunction', {
+    const originRequestFunction = new lambda.Function(this, 'ViktorijaPortfolioOriginRequest', {
+      functionName: 'viktorija-portfolio-origin-request',
+      description: 'Rewrites URLs for Astro static site (e.g., /about to /about/index.html)',
       runtime: new lambda.Runtime('nodejs24.x', lambda.RuntimeFamily.NODEJS),
       handler: 'index.handler',
       code: lambda.Code.fromAsset(path.join(__dirname, '../../lambdas/origin-request')),
-      architecture: lambda.Architecture.X86_64, // Lambda@Edge currently supports x86_64
+      architecture: lambda.Architecture.X86_64,
     });
 
-    // Origin Response Function (Adds Security Headers)
-    const originResponseFunction = new lambda.Function(this, 'OriginResponseFunction', {
+    const originResponseFunction = new lambda.Function(this, 'ViktorijaPortfolioOriginResponse', {
+      functionName: 'viktorija-portfolio-origin-response',
+      description: 'Adds security headers to CloudFront responses',
       runtime: new lambda.Runtime('nodejs24.x', lambda.RuntimeFamily.NODEJS),
       handler: 'index.handler',
       code: lambda.Code.fromAsset(path.join(__dirname, '../../lambdas/origin-response')),
@@ -40,7 +53,21 @@ export class ViktorijaPortfolioStack extends cdk.Stack {
     });
 
     // 3. CloudFront Distribution
-    const distribution = new cloudfront.Distribution(this, 'AstroDistribution', {
+    const viewerCertificate = certificateArn 
+      ? cloudfront.ViewerCertificate.fromAcmCertificate(
+          acm.Certificate.fromCertificateArn(this, 'ViktorijaPortfolioCertificate', certificateArn),
+          {
+            aliases: [domainName!, ...alternateNames],
+            sslMethod: cloudfront.SSLMethod.SNI,
+            securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
+          }
+        )
+      : undefined;
+
+    const distribution = new cloudfront.Distribution(this, 'ViktorijaPortfolioDistribution', {
+      comment: 'CloudFront distribution for Viktorija Korlevska Portfolio',
+      domainNames: domainName ? [domainName, ...alternateNames] : undefined,
+      certificate: certificateArn ? acm.Certificate.fromCertificateArn(this, 'PortfolioCert', certificateArn) : undefined,
       defaultBehavior: {
         origin: origins.S3BucketOrigin.withOriginAccessControl(bucket),
         compress: true,
@@ -59,8 +86,31 @@ export class ViktorijaPortfolioStack extends cdk.Stack {
       defaultRootObject: 'index.html',
     });
 
+    // 4. Route 53 Records
+    if (domainName) {
+      const zone = route53.HostedZone.fromLookup(this, 'ViktorijaPortfolioHostedZone', {
+        domainName: domainName.replace('www.', ''), // Ensure we get the root zone
+      });
+
+      new route53.ARecord(this, 'ViktorijaPortfolioAliasRecord', {
+        zone,
+        recordName: domainName,
+        target: route53.RecordTarget.fromAlias(new targets.CloudFrontTarget(distribution)),
+      });
+
+      alternateNames.forEach((alias, index) => {
+        new route53.ARecord(this, `ViktorijaPortfolioAliasRecord-${index}`, {
+          zone,
+          recordName: alias,
+          target: route53.RecordTarget.fromAlias(new targets.CloudFrontTarget(distribution)),
+        });
+      });
+    }
+
     // 4. Sanity Webhook Lambda (to trigger GHA)
-    const sanityWebhookLambda = new lambda.Function(this, 'SanityWebhookFunction', {
+    const sanityWebhookLambda = new lambda.Function(this, 'ViktorijaPortfolioSanityWebhook', {
+      functionName: 'viktorija-portfolio-sanity-webhook',
+      description: 'Triggers GitHub Actions workflow when Sanity content changes',
       runtime: lambda.Runtime.NODEJS_20_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset(path.join(__dirname, '../../lambdas/sanity-webhook')),
@@ -74,9 +124,12 @@ export class ViktorijaPortfolioStack extends cdk.Stack {
     });
 
     // 5. API Gateway for the Webhook
-    const api = new apigateway.RestApi(this, 'SanityWebhookApi', {
-      restApiName: 'Sanity Webhook Service',
-      description: 'Triggers GHA on Sanity content updates.',
+    const api = new apigateway.RestApi(this, 'ViktorijaPortfolioWebhookApi', {
+      restApiName: 'Viktorija Portfolio Webhook Service',
+      description: 'Endpoint for Sanity CMS webhooks to trigger site rebuilds',
+      deployOptions: {
+        stageName: 'prod',
+      },
     });
 
     const webhookIntegration = new apigateway.LambdaIntegration(sanityWebhookLambda);
@@ -93,7 +146,6 @@ export class ViktorijaPortfolioStack extends cdk.Stack {
       description: 'The CloudFront Distribution ID for invalidation',
     });
 
-    // Output CloudFront URL
     new cdk.CfnOutput(this, 'DistributionDomainName', {
       value: `https://${distribution.distributionDomainName}`,
       description: 'The CloudFront Distribution Domain Name',
@@ -101,7 +153,7 @@ export class ViktorijaPortfolioStack extends cdk.Stack {
 
     new cdk.CfnOutput(this, 'WebhookUrl', {
       value: api.url,
-      description: 'The Sanity Webhook URL',
+      description: 'The Sanity Webhook URL to trigger deployments',
     });
   }
 }

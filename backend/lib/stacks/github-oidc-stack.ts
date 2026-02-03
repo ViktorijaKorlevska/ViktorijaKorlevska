@@ -62,11 +62,9 @@ export class GitHubOIDCStack extends Stack {
 
   private addDeploymentPermissions(): void {
     const account = Stack.of(this).account;
-    const region = Stack.of(this).region;
 
-    // Expand resources to include 'viktorija-*'
+    // Resource wildcards for this project
     const stackWildcards = [
-        `arn:aws:cloudformation:*:${account}:stack/skillstation-*/*`,
         `arn:aws:cloudformation:*:${account}:stack/viktorija-*/*`,
         `arn:aws:cloudformation:*:${account}:stack/CDKToolkit/*`,
     ];
@@ -107,11 +105,8 @@ export class GitHubOIDCStack extends Stack {
         effect: iam.Effect.ALLOW,
         actions: ["s3:Create*", "s3:Delete*", "s3:Get*", "s3:List*", "s3:Put*"],
         resources: [
-            `arn:aws:s3:::skillstation-*`,
-            `arn:aws:s3:::skillstation-*/*`,
             `arn:aws:s3:::viktorija-*`,
             `arn:aws:s3:::viktorija-*/*`,
-            // Also need read access to existing buckets potentially used by CDK if not covered
         ],
       })
     );
@@ -162,10 +157,8 @@ export class GitHubOIDCStack extends Stack {
           "iam:Untag*",
         ],
         resources: [
-            `arn:aws:iam::${account}:role/skillstation-*`,
             `arn:aws:iam::${account}:role/viktorija-*`,
             `arn:aws:iam::${account}:role/cdk-*`,
-            `arn:aws:iam::${account}:policy/skillstation-*`,
             `arn:aws:iam::${account}:policy/viktorija-*`,
         ],
       })
@@ -189,22 +182,17 @@ export class GitHubOIDCStack extends Stack {
           "lambda:Untag*",
         ],
         resources: [
-            `arn:aws:lambda:*:${account}:function:skillstation-*`,
             `arn:aws:lambda:*:${account}:function:viktorija-*`,
-            `arn:aws:lambda:*:${account}:function:us-east-1:skillstation-*`,
             `arn:aws:lambda:*:${account}:function:us-east-1:viktorija-*`,
         ],
       })
     );
-    
-    // Add other services (Cognito, API Gateway, etc.) only if needed, 
-    // but copying user's list just to be safe they have what they asked for
 
     this.deploymentRole.addToPolicy(
       new iam.PolicyStatement({
         sid: "CloudWatchLogsManagement",
         effect: iam.Effect.ALLOW,
-        actions: ["logs:*"], // Simplify logs permissions
+        actions: ["logs:*"],
         resources: ["*"],
       })
     );
@@ -218,7 +206,6 @@ export class GitHubOIDCStack extends Stack {
       })
     );
 
-    // CloudFront OAC management
     this.deploymentRole.addToPolicy(
         new iam.PolicyStatement({
             sid: "CloudFrontOAC",
@@ -234,7 +221,6 @@ export class GitHubOIDCStack extends Stack {
         })
     );
 
-    // API Gateway management
     this.deploymentRole.addToPolicy(
       new iam.PolicyStatement({
         sid: "APIGatewayManagement",
