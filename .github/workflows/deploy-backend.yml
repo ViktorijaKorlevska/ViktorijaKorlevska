@@ -43,3 +43,9 @@ jobs:
         run: |
           cd backend
           npx cdk deploy viktorija-portfolio --require-approval never
+        env:
+          GITHUB_TOKEN: ${{ secrets.SANITY_GHA_TOKEN }}
+          SANITY_WEBHOOK_SECRET: ${{ secrets.SANITY_WEBHOOK_SECRET }}
+          GITHUB_OWNER: ViktorijaKorlevska
+          GITHUB_REPO: ViktorijaKorlevska
+          GITHUB_WORKFLOW: "deploy-client.yml"

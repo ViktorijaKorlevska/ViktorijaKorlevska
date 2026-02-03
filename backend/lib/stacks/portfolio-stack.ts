@@ -65,11 +65,11 @@ export class ViktorijaPortfolioStack extends cdk.Stack {
       handler: 'index.handler',
       code: lambda.Code.fromAsset(path.join(__dirname, '../../lambdas/sanity-webhook')),
       environment: {
-        GITHUB_TOKEN: 'REPLACE_WITH_GITHUB_PAT', // User should replace this or use Secrets Manager
-        GITHUB_OWNER: 'ViktorijaKorlevska',
-        GITHUB_REPO: 'ViktorijaKorlevska',
-        GITHUB_WORKFLOW: 'deploy-client.yml',
-        SANITY_WEBHOOK_SECRET: 'REPLACE_WITH_SANITY_SECRET', // Optional security
+        GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
+        GITHUB_OWNER: process.env.GITHUB_OWNER || 'ViktorijaKorlevska',
+        GITHUB_REPO: process.env.GITHUB_REPO || 'ViktorijaKorlevska',
+        GITHUB_WORKFLOW: process.env.GITHUB_WORKFLOW || 'deploy-client.yml',
+        SANITY_WEBHOOK_SECRET: process.env.SANITY_WEBHOOK_SECRET || '',
       },
     });
 
