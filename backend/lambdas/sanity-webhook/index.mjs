@@ -10,7 +10,11 @@ export const handler = async (event) => {
   // 1. Verify Sanity Signature (Optional but recommended)
   const signature = event.headers['ms-sanity-signature-v1'] || event.headers['Ms-Sanity-Signature-V1'];
   if (SANITY_WEBHOOK_SECRET && signature) {
-    const body = event.body;
+    let body = event.body;
+    if (event.isBase64Encoded) {
+      body = Buffer.from(body, 'base64').toString('utf8');
+    }
+    
     const expectedSignature = crypto
       .createHmac('sha256', SANITY_WEBHOOK_SECRET)
       .update(body)
