@@ -41,7 +41,7 @@ jobs:
           SANITY_DATASET: ${{ secrets.SANITY_DATASET }}
 
       - name: Configure AWS Credentials
-        uses: actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/cicd
           aws-region: us-east-1
