@@ -87,6 +87,22 @@ const webpageSchema = {
   <head>
     <meta charset="utf-8" />
 
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-08NQ65TXR8"
+    >
+    </script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+      gtag('js', new Date())
+
+      gtag('config', 'G-08NQ65TXR8')
+    </script>
+
     <title>{title}</title>
 
     <meta name="description" content={description} />
@@ -110,11 +126,12 @@ const webpageSchema = {
       sizes="180x180"
       href="/icons/apple-touch-icon.png"
     />
-    <meta name="apple-mobile-web-app-title" content="Viktorija Portfolio" />
+    <link rel="manifest" href="/icons/site.webmanifest" />
+    <meta name="apple-mobile-web-app-title" content="VK Portfolio" />
 
-    <meta name="theme-color" content="#160000" />
-    <meta name="msapplication-navbutton-color" content="#160000" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="#160000" />
+    <meta name="theme-color" content="#E9D985" />
+    <meta name="msapplication-navbutton-color" content="#E9D985" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="#E9D985" />
 
     <meta property="og:locale" content="en_GB" />
     <meta property="og:type" content="website" />
