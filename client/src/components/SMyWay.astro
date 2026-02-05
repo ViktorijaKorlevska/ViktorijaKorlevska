@@ -254,6 +254,12 @@ const frames =
      * Constructor
      */
     constructor() {
+      // Skip entire initialization on mobile
+      const isMobile = window.matchMedia('(max-width: 767px)').matches
+      if (isMobile) {
+        return
+      }
+
       // Elements
       this.el = document.querySelector('.s-my-way')
       this.svg = this.el.querySelector('.js-svg')
@@ -1480,10 +1486,6 @@ const frames =
         fill: color(primary);
         stroke: color(secondary);
         stroke-width: 1px;
-      }
-
-      @include mq(phone) {
-        display: none;
       }
     }
 
