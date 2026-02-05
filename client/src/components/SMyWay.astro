@@ -195,12 +195,6 @@ const frames =
      * Constructor
      */
     constructor() {
-      // Skip entire initialization on mobile to prevent scroll blocking
-      const isMobile = window.matchMedia('(max-width: 767px)').matches
-      if (isMobile) {
-        return
-      }
-
       // Elements
       this.el = document.querySelector('.s-my-way')
       this.svg = this.el.querySelector('.js-svg')
@@ -862,10 +856,6 @@ const frames =
       circle {
         fill: color(primary);
       }
-
-      @include mq(phone) {
-        display: none;
-      }
     }
 
     .s__objects {
@@ -888,10 +878,6 @@ const frames =
 
       @include mq(tablet) {
         perspective-origin: 50% calc(50% - var(--padding) * 0.275);
-      }
-
-      @include mq(phone) {
-        display: none;
       }
     }
 
@@ -1291,9 +1277,7 @@ const frames =
       line-height: 0.82;
       text-align: center;
       text-transform: uppercase;
-      white-space: normal;
-      word-break: keep-all;
-      hyphens: none;
+      white-space: nowrap;
 
       @include mq(tablet) {
         --amplitude: 75%;
@@ -1309,7 +1293,7 @@ const frames =
         left: 0;
 
         width: 100%;
-        height: 100vh;
+        height: calc(var(--padding) * 1.5);
 
         overflow: hidden;
         perspective: calc(var(--distortion) * 0.7em);
@@ -1381,9 +1365,7 @@ const frames =
 
           transform: translate3d(
             0,
-            calc(
-              var(--scroll-progress) * (var(--amplitude) * 0.5) - var(--offset)
-            ),
+            calc(var(--scroll-progress) * var(--amplitude) - var(--offset)),
             0
           );
         }
@@ -1394,8 +1376,7 @@ const frames =
           transform: translate3d(
             0,
             calc(
-              var(--scroll-progress) * (var(--amplitude) * 0.5) -
-                100% - var(--offset)
+              var(--scroll-progress) * var(--amplitude) - 100% - var(--offset)
             ),
             0
           );
