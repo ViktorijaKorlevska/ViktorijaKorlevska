@@ -106,7 +106,10 @@ const webpageSchema = {
     <title>{title}</title>
 
     <meta name="description" content={description} />
-    <meta name="viewport" content="width=device-width" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
     <meta name="generator" content={Astro.generator} />
 
     <meta name="robots" content="index, follow" />
@@ -803,6 +806,7 @@ const webpageSchema = {
 
       background: color(primary);
       clip-path: inset(0 -1rem);
+      overflow-x: hidden;
 
       @include mq(phone) {
         clip-path: inset(0 -0.5rem);

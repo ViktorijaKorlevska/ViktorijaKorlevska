@@ -422,7 +422,7 @@ import ASeparator from './ASeparator.astro'
       }
 
       @include mq(phone) {
-        font-size: calc(31vw - 0.75rem);
+        font-size: calc(16vw - 0.75rem);
       }
 
       &__word {
@@ -430,6 +430,7 @@ import ASeparator from './ASeparator.astro'
 
         display: block;
         height: 0.7975em;
+        white-space: nowrap;
 
         @include mq(tablet) {
           flex-grow: 0;
