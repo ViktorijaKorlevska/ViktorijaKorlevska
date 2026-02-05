@@ -8,7 +8,7 @@ const { profile } = Astro.props
 
 <footer class="site-foot">
   <div class="site-foot__logo">
-    <a href="/">
+    <a href={`mailto:${profile?.email}`}>
       <svg
         width="280"
         height="280"
@@ -16,12 +16,11 @@ const { profile } = Astro.props
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
+        <path d="M0 0v280h120v-280h-40v240H40V0H0Z" fill="currentColor"></path>
         <path
-          d="M240.245 0v263.2h-19.894V0h-39.756v263.2h-19.861V0h-39.755v280H280V0h-39.755Z"
-          fill="#160000"
+          d="M160 0v280h40v-120h40v120h40V150h-40v-20h40V0h-40v120h-40V0h-40Z"
+          fill="currentColor"
         >
-        </path>
-        <path d="M0 0v280h39.755V16.8H59.65V280h39.756V0H0Z" fill="#160000">
         </path>
       </svg>
 
@@ -51,9 +50,22 @@ const { profile } = Astro.props
         width: 3rem;
         height: 3rem;
 
+        color: #000;
+
         @include mq(phone) {
           width: 1.875rem;
           height: 1.875rem;
+        }
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+
+        &:hover,
+        &:visited,
+        &:active {
+          color: #000;
         }
       }
     }

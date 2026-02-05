@@ -78,11 +78,13 @@ export default defineType({
     }),
     defineField({
       name: 'cta_text',
+      description: "DEFAULT: LET'S ROCK",
       title: 'CTA Text',
       type: 'string',
     }),
     defineField({
       name: 'cta_button_text',
+      description: "DEFAULT: GO",
       title: 'CTA Button Label',
       type: 'string',
     }),

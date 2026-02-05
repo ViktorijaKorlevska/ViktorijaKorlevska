@@ -1,6 +1,4 @@
 ---
-import { Icon } from 'astro-icon/components'
-
 export interface Props {
   profile?: any
 }
@@ -26,7 +24,7 @@ const menu = [
 <header class="site-head" data-intersect>
   <div class="site-head__container">
     <div class="sb-logo">
-      <a href={`mailto:${profile?.email}`}>
+      <a href="/">
         <svg
           class="js-logo"
           width="280"
@@ -35,12 +33,12 @@ const menu = [
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path d="M0 0v280h120v-280h-40v240H40V0H0Z" fill="currentColor">
-          </path>
           <path
-            d="M160 0v280h40v-120h40v120h40V150h-40v-20h40V0h-40v120h-40V0h-40Z"
-            fill="currentColor"
+            d="M240.245 0v263.2h-19.894V0h-39.756v263.2h-19.861V0h-39.755v280H280V0h-39.755Z"
+            fill="#160000"
           >
+          </path>
+          <path d="M0 0v280h39.755V16.8H59.65V280h39.756V0H0Z" fill="#160000">
           </path>
         </svg>
 
@@ -70,16 +68,12 @@ const menu = [
     <ul class="sb-socials">
       <li class="sb__item">
         <a href={profile?.social_media?.behance} target="_blank" rel="noopener">
-          <div class="sb__icon-wrapper sb__icon-wrapper--behance">
-            <Icon
-              name="simple-icons:behance"
-              class="sb__icon-svg sb__icon-svg--base"
-            />
-            <Icon
-              name="simple-icons:behance"
-              class="sb__icon-svg sb__icon-svg--hover"
-            />
-          </div>
+          <span
+            class="sb__icon sb__icon--behance"
+            style="--path: path('M21.1 12.02c0-.11-.01-.22-.01-.33 0-1.04-.15-1.99-.46-2.85a5.55 5.55 0 0 0-1.39-2.14 5.38 5.38 0 0 0-2.22-1.3 7.43 7.43 0 0 0-2.95-.54c-.89 0-1.74.13-2.55.39a6.07 6.07 0 0 0-2.14 1.14 5.75 5.75 0 0 0-1.55 1.8 5.1 5.1 0 0 0-.6 2.41c0 .12 0 .25.01.37h7.21c.02.85.28 1.5.76 1.95.49.45 1.14.67 1.98.67 1.25 0 2.08-.5 2.46-1.52h3.44c-.3 1.52-1.08 2.68-2.33 3.47-1.25 1.79-2.92 1.19-5.02 1.19-1.24 0-2.38-.23-3.4-.7a5.96 5.96 0 0 1-2.48-2.02 6.09 6.09 0 0 1-1.25-3.24c-.07-.52-.1-1.04-.1-1.56s.24-2.43.73-3.51a6.38 6.38 0 0 1 2.05-2.54 5.92 5.92 0 0 1 3.24-1.04c.39-.01.78-.02.17-.02a6.83 6.83 0 0 1 2.94.59 5.48 5.48 0 0 1 2.19 1.64c.55.7.96 1.54 1.22 2.51.26.98.4 2.04.4 3.2s-.01.28-.01.39h-7.22c0-.8.2-1.42.61-1.86a1.35 1.35 0 0 1 .93-.33s1-.19 1.34.58c.34.39.53.96.56 1.72h3.64zm-13.62-1.4c.5-.03 1.06-.05 1.67-.06l-.01 1.71h-1.66c-.35 0-.63-.09-.84-.26a.85 0 0 1-.33-.7c0-.24.08-.44.25-.61a.82 0 0 1 .55-.24c.26 0 .37.08.37.16zm.12 3.99c.52-.03 1.07-.05 1.64-.05l-.01 1.85H7.59c-.38 0-.69-.1-.93-.3a.97.97 0 0 1-.36-.78c0-.26.09-.49.28-.68.19-.19.46-.28.81-.28.26 0 .37.08.34.24zm-.5-5.91c-.7 0-1.3.24-1.78.73a2.54 2.54 0 0 0-.73 1.84c0 .85.24 1.56.73 2.13.24.28.52.48.85.6a2.41 2.41 0 0 0 .84.6c-.4.21-.72.53-.96.96a2.63 2.63 0 0 0-.37 1.4c0 .85.34 1.59 1.01 2.22.67.57 1.56.85 2.66.85h4.74V5.54h-4.3c-.63 0-1.23.02-1.84.06zm13.13-.69H13.6V6.87h6.62v1.14z');"
+          >
+          </span>
+
           <span class="u-sr-only">Follow me on Behance</span>
         </a>
       </li>
@@ -90,16 +84,12 @@ const menu = [
           target="_blank"
           rel="noopener"
         >
-          <div class="sb__icon-wrapper sb__icon-wrapper--linkedin">
-            <Icon
-              name="fa6-brands:linkedin-in"
-              class="sb__icon-svg sb__icon-svg--base"
-            />
-            <Icon
-              name="fa6-brands:linkedin-in"
-              class="sb__icon-svg sb__icon-svg--hover"
-            />
-          </div>
+          <span
+            class="sb__icon sb__icon--linkedin"
+            style="--path: path('M1.13025 14.9839H3.93671V4.6H1.13025V14.9839ZM2.53348 0.0161285C1.598 0.0161285 0.849609 0.764516 0.849609 1.7C0.849609 2.63548 1.598 3.38387 2.53348 3.38387C3.46896 3.38387 4.21735 2.63548 4.21735 1.7C4.21735 0.764516 3.46896 0.0161285 2.53348 0.0161285ZM8.70767 6.19032V4.6H5.90122V14.9839H8.70767V9.65161C8.70767 6.65806 12.5432 6.47097 12.5432 9.65161V14.9839H15.3496V8.62258C15.3496 3.57097 10.0174 3.75806 8.70767 6.19032Z');"
+          >
+          </span>
+
           <span class="u-sr-only">Follow me on LinkedIn</span>
         </a>
       </li>
@@ -128,6 +118,14 @@ const menu = [
         </span>
       </p>
     </aside><!-- .sb-availability -->
+
+    <a
+      href={`mailto:${profile?.email}`}
+      class="sb-qr-code js-qr-code"
+      title="Contact me!"
+    >
+      <img src="/images/qr-code.svg" alt="QR Code" width="72" height="72" />
+    </a><!-- .sb-qr-code -->
   </div><!-- .site-head__container -->
 </header>
 
@@ -292,6 +290,7 @@ const menu = [
     intro() {
       const logo = this.el.querySelector('.js-logo')
       const menuItems = this.el.querySelectorAll('.js-menu-item')
+      const qrCode = this.el.querySelector('.js-qr-code')
 
       const items = [logo, ...menuItems]
 
@@ -320,6 +319,19 @@ const menu = [
           stagger: 0.1,
         },
         1.5,
+      )
+
+      tl.fromTo(
+        qrCode,
+        {
+          '--bg-p': '0%',
+        },
+        {
+          '--bg-p': '100%',
+          duration: 1.5,
+          ease: 'expo.out',
+        },
+        1.75,
       )
 
       tl.call(
@@ -503,22 +515,9 @@ const menu = [
         width: 3rem;
         height: 3rem;
 
-        color: #000;
-
         @include mq(phone) {
           width: 1.875rem;
           height: 1.875rem;
-        }
-      }
-
-      a {
-        color: inherit;
-        text-decoration: none;
-
-        &:hover,
-        &:visited,
-        &:active {
-          color: #000;
         }
       }
     }
@@ -691,51 +690,35 @@ const menu = [
         }
       }
 
-      .sb__icon-wrapper {
-        position: relative;
-        z-index: 1;
+      .sb__icon {
+        background: color(secondary);
 
-        width: 48px;
-        height: 48px;
+        clip-path: var(--path);
 
-        @include flex(row, center, center);
+        &:before {
+          position: absolute;
+          top: 0;
+          left: 0;
 
-        @include mq(phone) {
+          display: block;
+          width: 100%;
           height: 100%;
+
+          background: color(primary);
+          scale: 0 1;
+          transform-origin: 0 50%;
+
+          content: '';
         }
 
         &--behance {
-          .sb__icon-svg {
-            width: 20px;
-            height: 20px;
-          }
+          width: 20px;
+          height: 18px;
         }
 
         &--linkedin {
-          .sb__icon-svg {
-            width: 18px;
-            height: 18px;
-          }
-        }
-      }
-
-      .sb__icon-svg {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-
-        translate: -50% -50%;
-
-        transition: clip-path 0.3s ease(in-out-expo);
-        pointer-events: none;
-
-        &--base {
-          color: color(secondary);
-        }
-
-        &--hover {
-          color: color(primary);
-          clip-path: inset(0 100% 0 0);
+          width: 16px;
+          height: 15px;
         }
       }
 
@@ -771,13 +754,16 @@ const menu = [
             scale: 1 1;
           }
 
-          .sb__icon-svg--hover {
-            clip-path: inset(0);
+          .sb__icon {
+            &:before {
+              scale: 1 1;
+            }
           }
         }
       }
 
-      a:before {
+      a:before,
+      .sb__icon:before {
         transition: scale 0.3s ease(in-out-expo);
       }
     }
@@ -941,6 +927,40 @@ const menu = [
             transform-origin: 0 50%;
           }
         }
+      }
+    }
+
+    .sb-qr-code {
+      --bg-p: 0%;
+
+      position: relative;
+
+      display: block;
+      padding: 0.75rem;
+
+      border-left: 1px solid color(secondary);
+
+      @include mq(desktop-sm) {
+        display: none;
+      }
+
+      &:before {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        bottom: 0.75rem;
+        left: 0.75rem;
+
+        background: linear-gradient(
+            180deg,
+            transparent,
+            transparent var(--bg-p),
+            color(secondary) var(--bg-p),
+            color(secondary)
+          )
+          top / 100% 12.5% repeat;
+
+        content: '';
       }
     }
   }

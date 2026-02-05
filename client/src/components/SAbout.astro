@@ -10,6 +10,7 @@ const { profile } = Astro.props
 const description = profile?.description
 const htmlContent = description ? toHTML(description) : null
 
+/*
 const awards = {
   counters: {
     awwwards: ['SOTD x 16', 'Honors x 1'],
@@ -26,6 +27,7 @@ const awards = {
     CSSDA2015: 'CSSDA Best Front-End <br/>Developer 2015',
   },
 }
+*/
 ---
 
 <section id="about" class="s-about" data-intersect>
@@ -70,6 +72,8 @@ const awards = {
       </div><!-- .s__content -->
     </div><!-- .s__block -->
 
+    {
+      /*
     <div class="s__block s__block--awards">
       <h2 class="s__title">Awards</h2>
 
@@ -172,6 +176,8 @@ const awards = {
         </li>
       </ul><!-- .s__content -->
     </div><!-- .s__block -->
+    */
+    }
   </div><!-- .s__inner -->
 
   <svg class="s__grid js-grid">
@@ -657,7 +663,7 @@ const awards = {
     drawCanvas() {
       const { bounding, ctx, smileys } = this
 
-      ctx.fillStyle = 'red'
+      ctx.fillStyle = '#E9D985'
 
       ctx.clearRect(0, 0, bounding.width, bounding.height)
 

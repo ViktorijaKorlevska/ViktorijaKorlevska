@@ -794,7 +794,7 @@ const lines = ctaText.split(' ').map((word) => {
 
       &__link {
         position: absolute;
-        top: calc(50% + var(--size) * 0.36);
+        top: calc(50% + var(--size) * 0.34);
         left: 50%;
         z-index: 3;
 
@@ -806,7 +806,7 @@ const lines = ctaText.split(' ').map((word) => {
         transform: translate3d(-50%, 1em, 0);
 
         color: color(primary);
-        font: 700 14px / 1 font-family(fraktion);
+        font: 700 12px / 1 font-family(fraktion);
         letter-spacing: 0.1em;
         text-decoration: none;
         text-transform: uppercase;
@@ -818,11 +818,11 @@ const lines = ctaText.split(' ').map((word) => {
         will-change: transform, opacity;
 
         @include mq(phone) {
-          top: calc(50% + var(--size) * 0.28);
+          top: calc(50% + var(--size) * 0.24);
 
           padding: 1em;
 
-          font-size: 13px;
+          font-size: 10px;
         }
 
         &:before {

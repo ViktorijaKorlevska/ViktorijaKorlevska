@@ -8,16 +8,26 @@ const key = Math.random().toString(36).slice(2, 6) + '-' + index + '/' + total
 <a-work class={cssClass}>
   <div class="a__inner">
     <a href={site} target="_blank">
-      <video
-        data-src={src}
-        class="a__video js-video"
-        loop
-        muted
-        playsinline
-        width="1082"
-        height="636"
-      >
-      </video>
+      {
+        src ? (
+          <video
+            data-src={src}
+            class="a__video js-video"
+            loop
+            muted
+            playsinline
+            width="1082"
+            height="636"
+          />
+        ) : (
+          <img
+            src={Astro.props.image}
+            alt={caption}
+            class="a__img"
+            loading="lazy"
+          />
+        )
+      }
 
       <div class="a__caption">
         <div class="a__caption__text">
@@ -79,7 +89,7 @@ const key = Math.random().toString(36).slice(2, 6) + '-' + index + '/' + total
      * Gets in view
      */
     inView() {
-      this.video.play()
+      if (this.video) this.video.play()
       this.isPlaying = true
 
       this.classList.add('is-inview')
@@ -89,7 +99,7 @@ const key = Math.random().toString(36).slice(2, 6) + '-' + index + '/' + total
      * Gets out view
      */
     outView() {
-      this.video.pause()
+      if (this.video) this.video.pause()
       this.isPlaying = false
 
       this.classList.remove('is-inview')
@@ -142,7 +152,8 @@ const key = Math.random().toString(36).slice(2, 6) + '-' + index + '/' + total
       padding: 0;
     }
 
-    .a__video {
+    .a__video,
+    .a__img {
       display: block;
 
       width: auto;

@@ -1,106 +1,48 @@
 ---
 import AWork from './AWork.astro'
 import dummyVideo from '/src/assets/works/Dummy.mp4'
+import { sanityClient } from '../lib/sanity'
+import imageUrlBuilder from '@sanity/image-url'
 
-const videos = await Astro.glob<{ default: any }>('/src/assets/works/*.mp4')
-
-// Yeah, this should probably be in a CMS or content file.
-// But it’s my site, and editing it in code is faster than setting up yet another headless something.
-// Sometimes "quick and dirty" wins. Don’t @ me.
-const info = {
-  Pen: {
-    title: 'CodePen',
-    site: 'https://codepen.io/wodniack',
-  },
-  Dummy1: {
-    title: 'Dummy Project 1',
-    site: 'https://wodniack.dev',
-  },
-  Dummy2: {
-    title: 'Dummy Project 2',
-    site: 'https://wodniack.dev',
-  },
-  Dummy3: {
-    title: 'Dummy Project 3',
-    site: 'https://wodniack.dev',
-  },
-  Dummy4: {
-    title: 'Dummy Project 4',
-    site: 'https://wodniack.dev',
-  },
-  Dummy5: {
-    title: 'Dummy Project 5',
-    site: 'https://wodniack.dev',
-  },
-  Dummy6: {
-    title: 'Dummy Project 6',
-    site: 'https://wodniack.dev',
-  },
-  Dummy7: {
-    title: 'Dummy Project 7',
-    site: 'https://wodniack.dev',
-  },
-  Dummy8: {
-    title: 'Dummy Project 8',
-    site: 'https://wodniack.dev',
-  },
-  Dummy9: {
-    title: 'Dummy Project 9',
-    site: 'https://wodniack.dev',
-  },
-  Dummy10: {
-    title: 'Dummy Project 10',
-    site: 'https://wodniack.dev',
-  }
+const builder = imageUrlBuilder(sanityClient)
+function urlFor(source: any) {
+  return builder.image(source)
 }
 
-let projects = []
-let pens = []
+export interface Props {
+  profile?: any
+}
 
-// I removed the video loops to keep the repo lightweight.
-// But this is where I normally fetch and assign the videos for each project in the portfolio.
-videos.forEach((video, index) => {
-  const src = video.default
+const { profile } = Astro.props
 
-  const key = src.split('-')[0].split('/').pop()
-  const project = info[key]
-  if (!project) return
-  const caption = project.title
-  const site = project.site
+const portfolioItems = profile?.portfolio_items || []
 
-  if (key === 'Pen') {
-    pens.push({
-      caption,
-      site,
-      src,
-    })
-  } else {
-    projects.push({
-      caption,
-      site,
-      src,
-    })
+let works = []
+
+if (portfolioItems.length > 0) {
+  works = portfolioItems.map((item: any) => ({
+    caption: item.title,
+    site: item.link || '#',
+    src: item.videoUrl || null,
+    image: item.image ? urlFor(item.image).auto('format').url() : null,
+  }))
+} else {
+  // Fallback to dummy data
+  const info = {
+    Dummy1: { title: 'Project 1', site: '#' },
+    Dummy2: { title: 'Project 2', site: '#' },
   }
-})
-
-// Create dummy projects with 3 videos each
-for (let i = 1; i <= 14; i++) {
-  const key = `Dummy${i}`
-  const project = info[key]
-  if (!project) continue
-
-  for (let j = 0; j < 4; j++) {
-    projects.push({
-      caption: `${project.title} - Video ${j + 1}`,
-      site: project.site,
-      src: dummyVideo
+  for (let i = 1; i <= 8; i++) {
+    works.push({
+      caption: `Dummy Project ${i}`,
+      site: '#',
+      src: dummyVideo,
     })
   }
 }
 
 function shuffle(array) {
   let currentIndex = array.length
-
   while (currentIndex != 0) {
     let randomIndex = Math.floor(Math.random() * currentIndex)
     currentIndex--
@@ -111,21 +53,7 @@ function shuffle(array) {
   }
 }
 
-shuffle(projects)
-
-// Add pens in between projects regularly
-let works = []
-let chunkSize = Math.floor(projects.length / pens.length)
-let i = 0
-let j = 0
-while (i < projects.length) {
-  works.push(projects[i])
-  if (j < pens.length && (i + 1) % chunkSize === 0) {
-    works.push(pens[j])
-    j++
-  }
-  i++
-}
+shuffle(works)
 ---
 
 <section id="work" class="s-work" data-intersect>
@@ -148,6 +76,7 @@ while (i < projects.length) {
               caption={work.caption}
               site={work.site}
               src={work.src}
+              image={work.image}
               index={String(index).padStart(4, '0')}
               total={String(works.length).padStart(2, '0')}
             />
@@ -358,7 +287,7 @@ while (i < projects.length) {
      */
     setCtxStyle() {
       const color = getComputedStyle(this.el).getPropertyValue(
-        '--color-primary'
+        '--color-primary',
       )
 
       Ticker.nextTick(() => {
@@ -538,12 +467,14 @@ while (i < projects.length) {
           el.style.top = ghost.y + 'px'
           el.style.left = ghost.x + 'px'
 
-          el.style.zIndex = String(j !== 1 && j !== 2 && (j + letters.length + i) % 5 === 0 ? 3 : 1)
+          el.style.zIndex = String(
+            j !== 1 && j !== 2 && (j + letters.length + i) % 5 === 0 ? 3 : 1,
+          )
 
           el.style.setProperty('--ix', String(ghost.i))
           el.style.setProperty(
             '--iy',
-            String(((j + 1) / (letters.length + 1) - 0.5) * 2)
+            String(((j + 1) / (letters.length + 1) - 0.5) * 2),
           )
 
           el.style.setProperty('--ap', String(ghost.ap))
@@ -566,7 +497,7 @@ while (i < projects.length) {
         el.style.setProperty('--size', String(0.5 + Math.random() * 0.5))
         el.style.setProperty(
           '--y',
-          String((0.5 + Math.random() * 0.5) * (i % 2 ? -1 : 1))
+          String((0.5 + Math.random() * 0.5) * (i % 2 ? -1 : 1)),
         )
       })
     }
@@ -607,7 +538,7 @@ while (i < projects.length) {
           duration: 0.75,
           ease: 'power4.in',
         },
-        0
+        0,
       )
 
       tl.fromTo(
@@ -620,7 +551,7 @@ while (i < projects.length) {
           duration: 0.75,
           ease: 'power3.in',
         },
-        0
+        0,
       )
 
       tl.fromTo(
@@ -633,7 +564,7 @@ while (i < projects.length) {
           duration: 0.75,
           ease: 'power3.in',
         },
-        0
+        0,
       )
 
       tl.fromTo(
@@ -646,7 +577,7 @@ while (i < projects.length) {
           duration: 1,
           ease: 'power4.inOut',
         },
-        0
+        0,
       )
 
       tl.fromTo(
@@ -659,7 +590,7 @@ while (i < projects.length) {
           duration: 0.75,
           ease: 'power4.in',
         },
-        0
+        0,
       )
 
       tl.fromTo(
@@ -676,7 +607,7 @@ while (i < projects.length) {
           ease: 'slow(0.15, 0.6)',
           stagger: 0.25,
         },
-        0.75
+        0.75,
       )
 
       tl.fromTo(
@@ -689,7 +620,7 @@ while (i < projects.length) {
           duration: tl.totalDuration(),
           ease: 'power1.out',
         },
-        0.75
+        0.75,
       )
 
       tl.fromTo(
@@ -703,7 +634,7 @@ while (i < projects.length) {
           ease: 'power4.inOut',
           immediateRender: false,
         },
-        '-=1'
+        '-=1',
       )
 
       tl.fromTo(
@@ -717,7 +648,7 @@ while (i < projects.length) {
           ease: 'power4.inOut',
           immediateRender: false,
         },
-        '-=1'
+        '-=1',
       )
 
       tl.fromTo(
@@ -731,7 +662,7 @@ while (i < projects.length) {
           ease: 'power3.inOut',
           immediateRender: false,
         },
-        '-=1'
+        '-=1',
       )
 
       tl.fromTo(
@@ -745,7 +676,7 @@ while (i < projects.length) {
           ease: 'power3.inOut',
           immediateRender: false,
         },
-        '-=1'
+        '-=1',
       )
 
       tl.fromTo(
@@ -758,7 +689,7 @@ while (i < projects.length) {
           duration: 1,
           ease: 'power4.inOut',
         },
-        '-=1'
+        '-=1',
       )
     }
 
@@ -767,7 +698,7 @@ while (i < projects.length) {
      */
     loadNextVideo() {
       const video = Array.from(this.videos).find(
-        (video) => !video.classList.contains('is-loaded')
+        (video) => !video.classList.contains('is-loaded'),
       )
 
       if (video) {
@@ -779,7 +710,7 @@ while (i < projects.length) {
             () => {
               this.videoLoaded(video)
             },
-            { once: true }
+            { once: true },
           )
 
           video.setAttribute('src', video.getAttribute('data-src'))
@@ -908,20 +839,20 @@ while (i < projects.length) {
       this.scrollProgress =
         Math.max(
           Math.min(1, ScrollTrigger.positionInViewport(this.el, 'top')),
-          0
+          0,
         ) *
           -1 +
         (1 -
           Math.max(
             Math.min(1, ScrollTrigger.positionInViewport(this.el, 'bottom')),
-            0
+            0,
           ))
       this.smoothScrollProgress +=
         (this.scrollProgress - this.smoothScrollProgress) * 0.1
 
       this.el.style.setProperty(
         '--scroll-progress',
-        String(this.scrollProgress)
+        String(this.scrollProgress),
       )
 
       // Movement
@@ -1140,10 +1071,8 @@ while (i < projects.length) {
 
           color: color(shadow);
 
-          opacity: min(calc( var(--state) * 2 ), 1);
-          transform: scale(
-              1.05, 1.02
-            )
+          opacity: min(calc(var(--state) * 2), 1);
+          transform: scale(1.05, 1.02)
             translate3d(
               calc(var(--head) * 0.1rem * var(--state) * var(--state)),
               0,
