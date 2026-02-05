@@ -52,22 +52,10 @@ export class ViktorijaPortfolioStack extends cdk.Stack {
       architecture: lambda.Architecture.X86_64,
     });
 
-    // 3. CloudFront Distribution
-    const viewerCertificate = certificateArn 
-      ? cloudfront.ViewerCertificate.fromAcmCertificate(
-          acm.Certificate.fromCertificateArn(this, 'ViktorijaPortfolioCertificate', certificateArn),
-          {
-            aliases: [domainName!, ...alternateNames],
-            sslMethod: cloudfront.SSLMethod.SNI,
-            securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
-          }
-        )
-      : undefined;
-
     const distribution = new cloudfront.Distribution(this, 'ViktorijaPortfolioDistribution', {
       comment: 'CloudFront distribution for Viktorija Korlevska Portfolio',
       domainNames: domainName ? [domainName, ...alternateNames] : undefined,
-      certificate: certificateArn ? acm.Certificate.fromCertificateArn(this, 'PortfolioCert', certificateArn) : undefined,
+      certificate: certificateArn ? acm.Certificate.fromCertificateArn(this, 'ViktorijaPortfolioCertificate', certificateArn) : undefined,
       defaultBehavior: {
         origin: origins.S3BucketOrigin.withOriginAccessControl(bucket),
         compress: true,

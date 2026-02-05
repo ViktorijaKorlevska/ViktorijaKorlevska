@@ -234,5 +234,32 @@ export class GitHubOIDCStack extends Stack {
         ],
       })
     );
+
+    this.deploymentRole.addToPolicy(
+      new iam.PolicyStatement({
+        sid: "Route53Management",
+        effect: iam.Effect.ALLOW,
+        actions: ["route53:Get*", "route53:List*", "route53:ChangeResourceRecordSets"],
+        resources: ["*"],
+      })
+    );
+
+    this.deploymentRole.addToPolicy(
+      new iam.PolicyStatement({
+        sid: "CDKLookupRoleAssumption",
+        effect: iam.Effect.ALLOW,
+        actions: ["sts:AssumeRole"],
+        resources: [`arn:aws:iam::${account}:role/cdk-*-lookup-role-${account}-*`],
+      })
+    );
+
+    this.deploymentRole.addToPolicy(
+      new iam.PolicyStatement({
+        sid: "ACMManager",
+        effect: iam.Effect.ALLOW,
+        actions: ["acm:DescribeCertificate", "acm:ListCertificates", "acm:GetCertificate"],
+        resources: ["*"],
+      })
+    );
   }
 }

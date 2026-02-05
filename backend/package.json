@@ -12,8 +12,10 @@
     "bootstrap": "cdk bootstrap",
     "synth": "cdk synth",
     "deploy": "cdk deploy",
+    "deploy:oidc": "cdk deploy github-oidc",
+    "deploy:portfolio": "cdk deploy viktorija-portfolio",
     "destroy": "cdk destroy",
-    "deploy:all": "npm run build --prefix ../client && cdk deploy"
+    "deploy:all": "npm run build --prefix ../client && cdk deploy --all"
   },
   "devDependencies": {
     "@types/jest": "^30",
