@@ -335,17 +335,14 @@ const frames =
           this.objectDragStart.bind(this),
           { passive: false },
         )
+        object.el.addEventListener('touchmove', this.onTouchMove.bind(this), {
+          passive: false,
+        })
       })
       this.el.addEventListener('mouseup', this.objectDragEnd.bind(this))
       this.el.addEventListener('touchend', this.objectDragEnd.bind(this), {
         passive: false,
       })
-
-      this.objectsWrapper.addEventListener(
-        'touchmove',
-        this.onTouchMove.bind(this),
-        { passive: false },
-      )
 
       this.el.addEventListener('intersect', this.onIntersect.bind(this), {
         passive: true,
