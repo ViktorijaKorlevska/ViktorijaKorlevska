@@ -1298,7 +1298,7 @@ const frames =
       line-height: 0.82;
       text-align: center;
       text-transform: uppercase;
-      white-space: nowrap;
+      white-space: normal;
 
       @include mq(tablet) {
         --amplitude: 75%;
@@ -1314,7 +1314,7 @@ const frames =
         left: 0;
 
         width: 100%;
-        height: calc(var(--padding) * 1.5);
+        height: 100vh;
 
         overflow: hidden;
         perspective: calc(var(--distortion) * 0.7em);
@@ -1386,7 +1386,9 @@ const frames =
 
           transform: translate3d(
             0,
-            calc(var(--scroll-progress) * var(--amplitude) - var(--offset)),
+            calc(
+              var(--scroll-progress) * (var(--amplitude) * 0.5) - var(--offset)
+            ),
             0
           );
         }
@@ -1397,7 +1399,8 @@ const frames =
           transform: translate3d(
             0,
             calc(
-              var(--scroll-progress) * var(--amplitude) - 100% - var(--offset)
+              var(--scroll-progress) * (var(--amplitude) * 0.5) -
+                100% - var(--offset)
             ),
             0
           );
