@@ -920,6 +920,10 @@ const frames =
       circle {
         fill: color(primary);
       }
+
+      @include mq(phone) {
+        display: none;
+      }
     }
 
     .s__objects {
@@ -942,6 +946,10 @@ const frames =
 
       @include mq(tablet) {
         perspective-origin: 50% calc(50% - var(--padding) * 0.275);
+      }
+
+      @include mq(phone) {
+        display: none;
       }
     }
 
@@ -1472,6 +1480,10 @@ const frames =
         fill: color(primary);
         stroke: color(secondary);
         stroke-width: 1px;
+      }
+
+      @include mq(phone) {
+        display: none;
       }
     }
 
