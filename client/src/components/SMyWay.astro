@@ -333,14 +333,18 @@ const frames =
         object.el.addEventListener(
           'touchstart',
           this.objectDragStart.bind(this),
+          { passive: false },
         )
       })
       this.el.addEventListener('mouseup', this.objectDragEnd.bind(this))
-      this.el.addEventListener('touchend', this.objectDragEnd.bind(this))
+      this.el.addEventListener('touchend', this.objectDragEnd.bind(this), {
+        passive: false,
+      })
 
       this.objectsWrapper.addEventListener(
         'touchmove',
         this.onTouchMove.bind(this),
+        { passive: false },
       )
 
       this.el.addEventListener('intersect', this.onIntersect.bind(this), {
@@ -373,7 +377,9 @@ const frames =
      * Touch handler
      */
     onTouchMove(e) {
-      e.preventDefault()
+      if (this.draggedObject) {
+        e.preventDefault()
+      }
 
       const delta = performance.now() - this.lastTouch
       if (delta < Ticker.delta) return
@@ -628,11 +634,11 @@ const frames =
      * Object drag end
      */
     objectDragEnd(e) {
-      e.preventDefault()
-
       const object = this.draggedObject
 
       if (object) {
+        e.preventDefault()
+
         object.isDragging = false
         object.el.classList.remove('is-dragging')
 
@@ -640,6 +646,8 @@ const frames =
         object.el.classList.add('is-vanishing')
 
         object.vanishStart = performance.now()
+
+        this.draggedObject = null
       }
     }
 
