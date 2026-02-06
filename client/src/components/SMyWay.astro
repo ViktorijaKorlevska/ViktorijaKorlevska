@@ -1,9 +1,9 @@
 ---
 import { Image } from 'astro:assets'
 import { sanityClient } from '../lib/sanity'
-import imageUrlBuilder from '@sanity/image-url'
+import { createImageUrlBuilder } from '@sanity/image-url'
 
-const builder = imageUrlBuilder(sanityClient)
+const builder = createImageUrlBuilder(sanityClient)
 function urlFor(source: any) {
   return builder.image(source)
 }
@@ -43,11 +43,13 @@ const formattedPreCta = lines.join('<br />')
 
 const frames =
   profile?.other_works?.length > 0
-    ? profile.other_works.map((item: any) => ({
-        caption: item.caption,
-        src: urlFor(item.image).auto('format').url(),
-        isRemote: true,
-      }))
+    ? profile.other_works
+        .filter((item: any) => item.image) // Filter out items without images
+        .map((item: any) => ({
+          caption: item.caption,
+          src: urlFor(item.image).auto('format').url(),
+          isRemote: true,
+        }))
     : []
 ---
 

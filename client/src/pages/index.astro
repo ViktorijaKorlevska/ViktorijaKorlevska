@@ -9,7 +9,7 @@ import SMyWay from '../components/SMyWay.astro'
 import SCTA from '../components/SCTA.astro'
 import ASeparator from '../components/ASeparator.astro'
 import { sanityClient } from '../lib/sanity'
-import imageUrlBuilder from '@sanity/image-url'
+import { createImageUrlBuilder } from '@sanity/image-url'
 
 import '../styles/global.scss'
 
@@ -32,7 +32,7 @@ const portfolio = await sanityClient.fetch(`*[_type == "portfolio"][0]{
   }
 }`)
 
-const builder = imageUrlBuilder(sanityClient)
+const builder = createImageUrlBuilder(sanityClient)
 const urlFor = (source) => builder.image(source)
 
 // SEO Defaults & Dynamic values
@@ -88,11 +88,8 @@ const webpageSchema = {
     <meta charset="utf-8" />
 
     <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-08NQ65TXR8"
-    >
-    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-08NQ65TXR8"
+    ></script>
     <script is:inline>
       window.dataLayer = window.dataLayer || []
       function gtag() {

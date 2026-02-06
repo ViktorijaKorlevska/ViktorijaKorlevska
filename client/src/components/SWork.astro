@@ -1,9 +1,9 @@
 ---
 import AWork from './AWork.astro'
 import { sanityClient } from '../lib/sanity'
-import imageUrlBuilder from '@sanity/image-url'
+import { createImageUrlBuilder } from '@sanity/image-url'
 
-const builder = imageUrlBuilder(sanityClient)
+const builder = createImageUrlBuilder(sanityClient)
 function urlFor(source: any) {
   return builder.image(source)
 }
